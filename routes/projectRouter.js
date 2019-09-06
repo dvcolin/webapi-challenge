@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const Projects = require('../data/helpers/projectModel.js');
+const Actions = require('../data/helpers/actionModel.js');
 
 // GET /projects
 
@@ -30,7 +31,7 @@ router.get('/:id', validateProjectId, (req, res) => {
     })
 })
 
-// GET /projects/id
+// GET /projects/id/actions
 
 router.get('/:id/actions', validateProjectId, (req, res) => {
     const project = req.project;
@@ -58,6 +59,23 @@ router.post('/', validateProject, (req, res) => {
         res.status(500).json({ error: 'Project could not be added to server' })
     })
 
+})
+
+
+// POST /projects/id/actions
+
+router.post('/:id/actions', validateProjectId, validateAction, (req, res) => {
+    const project = req.project;
+    const action = req.action;
+
+    Actions.insert({ ...action, project_id: project.id })
+    .then(added => {
+        res.status(201).json(added);
+    })
+    .catch(err => {
+        res.status(500).json({ error: 'Action could not be added to the server.' });
+        console.log(action);
+    })
 })
 
 
@@ -125,6 +143,17 @@ function validateProject(req, res, next) {
         res.status(400).json({ message: 'Please add all required fields' })
     } else {
         req.project = projectBody;
+        next();
+    }
+}
+
+function validateAction(req, res, next) {
+    const actionBody = req.body;
+
+    if (!actionBody.description || !actionBody.notes) {
+        res.status(400).json({ message: 'Description and notes fields are required.' });
+    } else {
+        req.action = actionBody;
         next();
     }
 }
