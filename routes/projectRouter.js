@@ -4,6 +4,8 @@ const router = express.Router();
 
 const Projects = require('../data/helpers/projectModel.js');
 
+// GET /projects
+
 router.get('/', (req, res) => {
     Projects.get()
     .then(projects => {
@@ -13,6 +15,8 @@ router.get('/', (req, res) => {
         res.status(500).json({ error: 'Projects data could not be retrieved from the server' })
     })
 })
+
+// GET /projects/id
 
 router.get('/:id', validateProjectId, (req, res) => {
     const project = req.project;
@@ -26,6 +30,20 @@ router.get('/:id', validateProjectId, (req, res) => {
     })
 })
 
+
+// POST /projects
+router.post('/', validateProject, (req, res) => {
+    const project = req.project;
+
+    Projects.insert(project)
+    .then(added => {
+        res.status(201).json(added);
+    })
+    .catch(err => {
+        res.status(500).json({ error: 'Project could not be added to server' })
+    })
+
+})
 
 // middleware
 
@@ -43,6 +61,17 @@ function validateProjectId(req, res, next) {
     .catch(err => {
         res.status(500).json({ message: 'Project data could not be accessed.' });
     })
+}
+
+function validateProject(req, res, next) {
+    const projectBody = req.body;
+
+    if(!projectBody.name || !projectBody.description) {
+        res.status(400).json({ message: 'Please add all required fields' })
+    } else {
+        req.project = projectBody;
+        next();
+    }
 }
 
 
