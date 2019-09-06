@@ -32,6 +32,21 @@ router.get('/:id', validateActionId, (req, res) => {
 })
 
 
+// DEL /actions/id
+
+router.delete('/:id', validateActionId, (req, res) => {
+    const action = req.action;
+
+    Actions.remove(action.id)
+    .then(deleted => {
+        res.status(200).json(deleted);
+    })
+    .catch(err => {
+        res.status(500).json({ error: 'Action could not be deleted from the server.' });
+    })
+})
+
+
 // middleware
 
 function validateActionId (req, res, next) {
