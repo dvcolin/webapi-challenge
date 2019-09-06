@@ -61,6 +61,31 @@ router.delete('/:id', validateProjectId, (req, res) => {
     })
 })
 
+
+// PUT /projects/id
+
+router.put('/:id', validateProjectId, (req, res) => {
+    const project = req.project;
+    const changes = req.body;
+
+    if(!changes.name && !changes.description) {
+        res.status(400).json({ message: 'Please update name or description field' })
+    } else {
+
+        Projects.update(project.id, changes)
+        .then(updated => {
+            res.status(200).json(updated);
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Project could not be updated.' });
+        })
+    }
+
+
+
+})
+
+
 // middleware
 
 function validateProjectId(req, res, next) {
