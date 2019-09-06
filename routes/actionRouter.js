@@ -47,6 +47,26 @@ router.delete('/:id', validateActionId, (req, res) => {
 })
 
 
+// PUT /actions/id
+
+router.put('/:id', validateActionId, (req, res) => {
+    const action = req.action;
+    const changes = req.body;
+
+    if (!changes.description && !changes.notes) {
+        res.status(400).json({ message: 'Please update notes or description field' })
+    } else {
+        Actions.update(action.id, changes)
+        .then(updated => {
+            res.status(200).json(updated);
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Action could not be deleted from the server.' });
+        })
+    }
+})
+
+
 // middleware
 
 function validateActionId (req, res, next) {
