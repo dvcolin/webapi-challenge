@@ -26,13 +26,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+I learned that Express is used to manage servers for web applications, and that it can be broken up into `routes`. Routes are used to handle requests for specific sets of data on a server.
+
 - [ ] Describe Middleware?
+
+Middleware are reusable functions which can be used for many purposes when handling requests, such as logging the request, validating an id, or checking that the request body has the required fields. If the request does not pass the conditions specified in the middleware function, it will return an error rather than move on to the request. Middleware can be used for every request or specific requests.
 
 - [ ] Describe a Resource?
 
+A resource is an object or piece of data that can be accessed by a specific URL and manipulated using HTTP methods. It is essentially any piece of data that is stored on a RESTful web server.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+The API can return HTTP status codes with messages to help clients know if a request succeeded or failed. Successful requests usually return the status code `200` and when a post request is successful, `201`.
+
 - [ ] How can we partition our application into sub-applications?
+
+We can partition our application into sub-applications by breaking it up into `routes`. Routes are JS files that manage requests dealing with specific URLs. This way, we can divide our server requests into their own files, therefore making our code cleaner and more organized. 
 
 ## Project Setup
 
