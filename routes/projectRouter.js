@@ -30,6 +30,20 @@ router.get('/:id', validateProjectId, (req, res) => {
     })
 })
 
+// GET /projects/id
+
+router.get('/:id/actions', validateProjectId, (req, res) => {
+    const project = req.project;
+
+    Projects.getProjectActions(project.id)
+    .then(actions => {
+        res.status(200).json(actions);
+    })
+    .catch(err => {
+        res.status(500).json({ error: 'Project data could not be retrieved from the server' })
+    })
+})
+
 
 // POST /projects
 
