@@ -32,6 +32,7 @@ router.get('/:id', validateProjectId, (req, res) => {
 
 
 // POST /projects
+
 router.post('/', validateProject, (req, res) => {
     const project = req.project;
 
@@ -43,6 +44,21 @@ router.post('/', validateProject, (req, res) => {
         res.status(500).json({ error: 'Project could not be added to server' })
     })
 
+})
+
+
+// DEL /projects/id
+
+router.delete('/:id', validateProjectId, (req, res) => {
+    const project = req.project;
+
+    Projects.remove(project.id)
+    .then(deleted => {
+        res.status(200).json(deleted);
+    })
+    .catch(err => {
+        res.status(500).json({ message: 'Project could not be deleted.' });
+    })
 })
 
 // middleware
